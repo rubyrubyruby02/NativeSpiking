@@ -12,7 +12,6 @@ export default function APITest() {
       .get("https://pokeapi.co/api/v2/pokemon/ditto")
       .then(({ data }) => {
         setPokemon(data);
-        console.log(data);
       })
       .catch((error) => {
         console.error("Error fetching Pokemon data:", error);
