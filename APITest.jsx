@@ -1,29 +1,33 @@
 import { StatusBar } from "expo-status-bar";
-import { Button, ScrollView, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import styles from "./styling";
 import { useEffect, useState } from "react";
-import axios from "axios"
+import axios from "axios";
 
 export default function APITest() {
-const [pokemon, setPokemon] = useState({})
+  const [pokemon, setPokemon] = useState({});
 
-    useEffect(()=>{
-        axios.get("https://pokeapi.co/api/v2/pokemon/ditto").then(({data})=>{
-            setPokemon(data)
-            console.log(data)
-        })
-    }, [])
+  useEffect(() => {
+    axios
+      .get("https://pokeapi.co/api/v2/pokemon/ditto")
+      .then(({ data }) => {
+        setPokemon(data);
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching Pokemon data:", error);
+      });
+  }, []);
 
-    return (
-      <>
+  return (
+    <>
       <View style={styles.container}>
-        <Text>This is the API Test Page</Text>
         <StatusBar style="auto" />
-        <View>
-           <Text>{pokemon.name}</Text> 
+        <Text>This is the API Test Page</Text>
+        <View key={pokemon.id} style={styles.item}>
+          <Text>{pokemon.name}</Text>
         </View>
       </View>
-      </>
-    );
-  }
-  
+    </>
+  );
+}
