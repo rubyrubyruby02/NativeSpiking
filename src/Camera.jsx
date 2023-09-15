@@ -9,13 +9,14 @@ import {
   Image,
 } from "react-native";
 import styles from "./styling";
-//import { readFile } from "react-native-fs";
+import * as FileSystem from "expo-file-system";
+import { postImageName } from "../utils/utils";
 
 export default function TestCamera() {
   const [type, setType] = useState(CameraType.back);
   const [hasPermission, setHasPermission] = useState(null);
   const [capturedImage, setCapturedImage] = useState(null);
-  // const [preview, setPreview] = useState(false);
+  const [base64Image, setBase64Image] = useState(null);
 
   const cameraRef = useRef(null);
 
@@ -47,15 +48,26 @@ export default function TestCamera() {
       const source = data.uri;
       if (source) {
         setCapturedImage(source);
-        loadImageBase64(capturedImage)
+        loadImageBase64(source);
       }
     }
   };
 
   const loadImageBase64 = async (capturedImage) => {
-  //     //const base64Data = await readFile(capturedImage, 'base64');
-  //     return 'data:image/jpeg;base64,' + base64Data;
-   };
+    const fileInfo = await FileSystem.getInfoAsync(capturedImage);
+    if (fileInfo.exists) {
+      const base64Data = await FileSystem.readAsStringAsync(capturedImage, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+      const moreEndcodedData = "data:image/jpeg;base64," + base64Data;
+      setBase64Image(moreEndcodedData);
+      postImageName(moreEndcodedData);
+    }
+  };
+
+  const post64Data = async (base64Image) => {
+    console.log(base64Image);
+  };
 
   return (
     <View style={styles.cameraContainer}>
