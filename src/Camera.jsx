@@ -9,6 +9,7 @@ import {
   Image,
 } from "react-native";
 import styles from "./styling";
+//import { readFile } from "react-native-fs";
 
 export default function TestCamera() {
   const [type, setType] = useState(CameraType.back);
@@ -46,9 +47,15 @@ export default function TestCamera() {
       const source = data.uri;
       if (source) {
         setCapturedImage(source);
+        loadImageBase64(capturedImage)
       }
     }
   };
+
+  const loadImageBase64 = async (capturedImage) => {
+  //     //const base64Data = await readFile(capturedImage, 'base64');
+  //     return 'data:image/jpeg;base64,' + base64Data;
+   };
 
   return (
     <View style={styles.cameraContainer}>
@@ -77,7 +84,6 @@ export default function TestCamera() {
             source={{ uri: capturedImage }}
             style={{ width: 300, height: 400 }}
           ></Image>
-          <Text>hELLO</Text>
         </View>
       )}
     </View>
