@@ -15,9 +15,22 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 
+  cameraContainer: {
+    flex: 1,
+  },
+
   camera: {
     flex: 1,
   },
+
+  button: {
+    backgroundColor: "red",
+    fontSize: "32",
+  },
+
+
+
+
 });
 
 export default styles;
