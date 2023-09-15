@@ -45,7 +45,6 @@ export default function TestCamera() {
       const data = await cameraRef.current.takePictureAsync();
       const source = data.uri;
       if (source) {
-        console.log(source);
         setCapturedImage(source);
       }
     }
@@ -75,14 +74,10 @@ export default function TestCamera() {
       ) : (
         <View style={styles.previewImage}>
           <Image
-            source={{ source: capturedImage }}
+            source={{ uri: capturedImage }}
             style={{ width: 300, height: 400 }}
           ></Image>
           <Text>hELLO</Text>
-          <Image
-            source={{ source: capturedImage }}
-            style={{ width: 300, height: 400 }}
-          ></Image>
         </View>
       )}
     </View>
