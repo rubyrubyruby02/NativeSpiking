@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Camera, CameraType } from "expo-camera";
 import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import styles from "./styling";
@@ -6,7 +6,10 @@ import styles from "./styling";
 export default function TestCamera() {
   const [type, setType] = useState(CameraType.back);
   const [hasPermission, setHasPermission] = useState(null);
-  const [capturedImage, setCapturedImage] = useState("")
+  const [capturedImage, setCapturedImage] = useState(null);
+  const [preview, setPreview] = useState(false);
+
+  const cameraRef = useRef();
 
   useEffect(() => {
     Camera.requestCameraPermissionsAsync()
@@ -31,27 +34,32 @@ export default function TestCamera() {
   }
 
   const takePicture = async () => {
-    if (!Camera) return
-    const photo = await Camera.takePictureAsync()
-    console.log(photo)
-    setCapturedImage(photo)
+    if (cameraRef.current) {
+      const data = await cameraRef.current.takePictureAsync();
+      const source = data.uri;
+      if (source) {
+        setPreview(true);
+        setCapturedImage(source);
+      }
+    }
+  };
+
+  if (preview && capturedImage) {
+    
   }
   
 
   return (
     <View style={styles.cameraContainer}>
-      <Camera style={styles.camera} type={type}>
+      <Camera style={styles.camera} type={type} ref={cameraRef}>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={toggleCameraType}>
-            <Button style={styles.button} title="Flip camera"  color="white">
+            <Button style={styles.button} onPress={toggleCameraType} title="Flip camera" color="white">
             </Button>
-          </TouchableOpacity>
-          </View>
-          
-          <TouchableOpacity style={styles.button} onPress={takePicture}>
-          <Button style={styles.button} title="Take Pic"  color="white">
-          </Button>
-        </TouchableOpacity>
+        </View>
+        <View>
+            <Button style={styles.button} onPress={takePicture} title="Take Pic" color="white">
+            </Button>
+        </View>
 
       </Camera>
     </View>
